@@ -166,6 +166,34 @@
   .preset-btn:hover {
     background: #1a1d27;
   }
+  .fx-refresh {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #111320;
+    border: 1px solid #2a2d3a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #818cf8;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.4s;
+    line-height: 1;
+  }
+  .fx-refresh:hover { background: #1a1d27; }
+  .fx-refresh:active { transform: translateY(-50%) rotate(180deg); }
+  .fx-refresh.loading { animation: spin 0.8s linear infinite; }
+  .fx-refresh.fail { color: #f87171; border-color: #7f1d1d; }
+  .fx-refresh.success { color: #4ade80; border-color: #14532d; }
+  @keyframes spin { from { transform: translateY(-50%) rotate(0deg); } to { transform: translateY(-50%) rotate(360deg); } }
+  .fx-source {
+    font-size: 0.7rem;
+    color: #52525b;
+    margin-top: 4px;
+    text-align: right;
+  }
+  input#fxRate { padding-right: 44px; }
 </style>
 </head>
 <body>
@@ -203,7 +231,9 @@
       </label>
       <div class="input-wrap">
         <input type="number" id="fxRate" step="0.0001" min="0" placeholder="1.2700" value="1.27" style="padding-left: 14px;">
+        <button class="fx-refresh" id="fxRefresh" title="自動獲取匯率" onclick="fetchFxRate()">🔄</button>
       </div>
+      <div class="fx-source" id="fxSource"></div>
     </div>
 
     <div class="input-group">
@@ -310,7 +340,44 @@ function calc() {
   document.getElementById(id).addEventListener('input', calc);
 });
 
-calc();
+/* === 即時匯率 === */
+async function fetchFxRate() {
+  const btn = document.getElementById('fxRefresh');
+  const src = document.getElementById('fxSource');
+  btn.classList.remove('fail', 'success');
+  btn.classList.add('loading');
+  btn.textContent = '⟳';
+  src.textContent = '獲取中…';
+
+  try {
+    const res = await fetch('https://api.frankfurter.app/latest?from=GBP&to=USD');
+    if (!res.ok) throw new Error('API error');
+    const data = await res.json();
+    const rate = data.rates.USD;
+    document.getElementById('fxRate').value = rate.toFixed(4);
+    src.textContent = `✓ 已更新 · ${new Date(data.date).toLocaleDateString('en-GB')} · 來源：Frankfurter / ECB`;
+    btn.classList.remove('loading');
+    btn.classList.add('success');
+    btn.textContent = '✓';
+    setTimeout(() => {
+      btn.classList.remove('success');
+      btn.textContent = '🔄';
+    }, 2000);
+    calc();
+  } catch (err) {
+    btn.classList.remove('loading');
+    btn.classList.add('fail');
+    btn.textContent = '✕';
+    src.textContent = '獲取失敗，請手動輸入';
+    setTimeout(() => {
+      btn.classList.remove('fail');
+      btn.textContent = '🔄';
+    }, 3000);
+  }
+}
+
+// 頁面載入時自動獲取一次
+fetchFxRate();
 </script>
 </body>
 </html>
