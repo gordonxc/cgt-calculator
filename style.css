@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-  max-width: 480px;
+  max-width: 520px;
   width: 100%;
 }
 
@@ -26,21 +26,30 @@ h1 {
   text-align: center;
   font-size: 0.85rem;
   color: #71717a;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
+
+/* === Cards === */
 
 .card {
   background: #1a1d27;
   border: 1px solid #2a2d3a;
   border-radius: 14px;
-  padding: 24px;
-  margin-bottom: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #a1a1aa;
+  margin-bottom: 16px;
 }
 
 /* === Inputs === */
 
 .input-group {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .input-group:last-child { margin-bottom: 0; }
 
@@ -74,19 +83,19 @@ label {
   pointer-events: none;
 }
 
-input[type="number"] {
+input[type="number"], input[type="text"] {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 14px;
   padding-left: 34px;
   background: #111320;
   border: 1.5px solid #2a2d3a;
   border-radius: 10px;
   color: #f4f4f5;
-  font-size: 1.05rem;
+  font-size: 1rem;
   outline: none;
   transition: border-color 0.15s;
 }
-input[type="number"]:focus {
+input[type="number"]:focus, input[type="text"]:focus {
   border-color: #6366f1;
 }
 input[type="number"]::-webkit-inner-spin-button,
@@ -94,65 +103,288 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
-/* === Result Card === */
+/* === Preset Buttons === */
+
+.preset-btn {
+  background: #111320;
+  border: 1px solid #2a2d3a;
+  border-radius: 8px;
+  padding: 3px 10px;
+  color: #818cf8;
+  font-size: 0.72rem;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: background 0.15s;
+}
+.preset-btn:hover { background: #1a1d27; }
+
+/* === Stock Card === */
+
+.stock-card {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stock-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stock-name {
+  flex: 0 0 100px;
+  padding: 8px 12px !important;
+  font-weight: 600;
+  font-size: 1rem !important;
+}
+
+.stock-gain-badge {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.stock-gain-badge.positive {
+  background: #052e16;
+  color: #4ade80;
+}
+.stock-gain-badge.negative {
+  background: #450a0a;
+  color: #f87171;
+}
+
+.btn-remove-stock {
+  background: none;
+  border: none;
+  color: #52525b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.15s;
+}
+.btn-remove-stock:hover { color: #f87171; }
+
+/* === Buy Lots === */
+
+.buy-lots {
+  margin-bottom: 14px;
+}
+
+.lot-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.lot-input {
+  flex: 1;
+}
+
+.lot-input input {
+  padding-left: 28px !important;
+  font-size: 0.9rem !important;
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
+}
+
+.lot-prefix {
+  position: absolute;
+  left: 10px;
+  color: #52525b;
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.btn-remove-lot {
+  flex: 0 0 32px;
+  height: 32px;
+  background: #111320;
+  border: 1px solid #2a2d3a;
+  border-radius: 8px;
+  color: #52525b;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-remove-lot:hover { color: #f87171; border-color: #7f1d1d; }
+
+.btn-add-lot {
+  background: none;
+  border: 1px dashed #2a2d3a;
+  border-radius: 8px;
+  color: #71717a;
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-add-lot:hover { color: #818cf8; border-color: #6366f1; }
+
+/* === Stock Result === */
+
+.stock-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stock-stat {
+  background: #111320;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.stock-stat-label {
+  font-size: 0.68rem;
+  color: #52525b;
+  margin-bottom: 2px;
+}
+
+.stock-stat-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #d4d4d8;
+}
+.stock-stat-value.green { color: #4ade80; }
+.stock-stat-value.red { color: #f87171; }
+
+/* Sell qty input */
+.sell-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #111320;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.sell-section label {
+  margin: 0;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.sell-section input {
+  flex: 1;
+  padding: 6px 10px !important;
+  padding-left: 10px !important;
+  font-size: 0.95rem !important;
+  text-align: right;
+  border-radius: 6px;
+}
+
+.sell-stat {
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
+}
+.sell-stat.green { color: #4ade80; }
+.sell-stat.red { color: #f87171; }
+
+/* === Add Stock Button === */
+
+.btn-add-stock {
+  width: 100%;
+  background: transparent;
+  border: 2px dashed #2a2d3a;
+  border-radius: 14px;
+  padding: 16px;
+  color: #71717a;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-add-stock:hover {
+  color: #818cf8;
+  border-color: #6366f1;
+}
+
+/* === Summary === */
 
 .result-card {
   background: linear-gradient(135deg, #1e2235, #1a1e30);
   border: 1px solid #312e4a;
 }
 
-.result-main {
-  text-align: center;
-  margin-bottom: 20px;
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-.result-label {
-  font-size: 0.8rem;
+.summary-item {
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 0.75rem;
   color: #818cf8;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-weight: 500;
 }
 
-.result-value {
-  font-size: 2.8rem;
+.summary-value {
+  font-size: 1.6rem;
   font-weight: 700;
   color: #c4b5fd;
-  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.summary-value.amber { color: #fbbf24; }
+.summary-value.green { color: #4ade80; }
+
+/* === Allowance Bar === */
+
+.allowance-bar-wrap {
+  margin-top: 4px;
 }
 
-.result-unit {
-  font-size: 0.9rem;
-  color: #71717a;
-  margin-top: 2px;
+.allowance-bar {
+  height: 8px;
+  background: #111320;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-/* === Breakdown === */
-
-.breakdown {
-  border-top: 1px solid #2a2d3a;
-  padding-top: 16px;
+.allowance-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, #fbbf24);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.allowance-bar-fill.over {
+  background: linear-gradient(90deg, #fbbf24, #f87171);
 }
 
-.breakdown-row {
+.allowance-bar-labels {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 7px 0;
-  font-size: 0.85rem;
-}
-
-.breakdown-row.total {
-  border-top: 1px solid #2a2d3a;
   margin-top: 6px;
-  padding-top: 13px;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.72rem;
+  color: #52525b;
+  font-variant-numeric: tabular-nums;
 }
-
-.breakdown-label { color: #a1a1aa; }
-.breakdown-value { color: #e4e4e7; font-variant-numeric: tabular-nums; }
-.breakdown-value.green { color: #4ade80; }
-.breakdown-value.amber { color: #fbbf24; }
 
 /* === Warning === */
 
@@ -163,39 +395,11 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 12px 14px;
   font-size: 0.8rem;
   color: #fbbf24;
-  margin-top: 16px;
+  margin-top: 14px;
   line-height: 1.5;
 }
 
-/* === Footer Info === */
-
-.info {
-  font-size: 0.75rem;
-  color: #52525b;
-  text-align: center;
-  line-height: 1.6;
-  margin-top: 20px;
-}
-
-/* === Preset Button === */
-
-.preset-btn {
-  display: inline-block;
-  background: #111320;
-  border: 1px solid #2a2d3a;
-  border-radius: 8px;
-  padding: 4px 12px;
-  color: #818cf8;
-  font-size: 0.75rem;
-  cursor: pointer;
-  margin-left: 8px;
-  transition: background 0.15s;
-}
-.preset-btn:hover {
-  background: #1a1d27;
-}
-
-/* === FX Refresh Button === */
+/* === FX Refresh === */
 
 .fx-refresh {
   position: absolute;
@@ -209,11 +413,10 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #818cf8;
   font-size: 0.8rem;
   cursor: pointer;
-  transition: background 0.15s, transform 0.4s;
+  transition: background 0.15s;
   line-height: 1;
 }
 .fx-refresh:hover { background: #1a1d27; }
-.fx-refresh:active { transform: translateY(-50%) rotate(180deg); }
 .fx-refresh.loading { animation: spin 0.8s linear infinite; }
 .fx-refresh.fail { color: #f87171; border-color: #7f1d1d; }
 .fx-refresh.success { color: #4ade80; border-color: #14532d; }
@@ -233,4 +436,14 @@ input[type="number"]::-webkit-outer-spin-button {
 input#fxRate {
   padding-left: 14px;
   padding-right: 44px;
+}
+
+/* === Footer === */
+
+.info {
+  font-size: 0.75rem;
+  color: #52525b;
+  text-align: center;
+  line-height: 1.6;
+  margin-top: 16px;
 }

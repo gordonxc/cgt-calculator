@@ -9,31 +9,11 @@
 <body>
 <div class="container">
   <h1>Capital Gains Tax 計算機</h1>
-  <p class="subtitle">計算最多可以賣幾多股而唔超過免稅額</p>
+  <p class="subtitle">多股票 · 多次買入 · 即時計算 CGT 免稅額</p>
 
+  <!-- Global Settings -->
   <div class="card">
-    <div class="input-group">
-      <label>
-        買入價（每股）
-        <span class="currency-hint">USD</span>
-      </label>
-      <div class="input-wrap">
-        <span class="input-prefix">$</span>
-        <input type="number" id="buyPrice" step="0.01" min="0" placeholder="0.00" value="100">
-      </div>
-    </div>
-
-    <div class="input-group">
-      <label>
-        賣出價（每股）
-        <span class="currency-hint">USD</span>
-      </label>
-      <div class="input-wrap">
-        <span class="input-prefix">$</span>
-        <input type="number" id="sellPrice" step="0.01" min="0" placeholder="0.00" value="120">
-      </div>
-    </div>
-
+    <div class="card-title">⚙️ 全局設定</div>
     <div class="input-group">
       <label>
         英鎊兌美金匯率
@@ -51,6 +31,7 @@
         免稅限額（CGT Allowance）
         <span class="currency-hint">GBP</span>
         <span class="preset-btn" id="preset3000">£3,000</span>
+        <span class="preset-btn" id="preset6000">£6,000</span>
       </label>
       <div class="input-wrap">
         <span class="input-prefix">£</span>
@@ -59,33 +40,32 @@
     </div>
   </div>
 
+  <!-- Stock Cards (dynamic) -->
+  <div id="stockList"></div>
+
+  <!-- Add Stock Button -->
+  <button class="btn-add-stock" id="addStock">+ 新增股票</button>
+
+  <!-- Global Summary -->
   <div class="card result-card">
-    <div class="result-main">
-      <div class="result-label">建議賣出股數</div>
-      <div class="result-value" id="maxShares">0</div>
-      <div class="result-unit">股</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="summary-label">總盈利（GBP）</div>
+        <div class="summary-value" id="totalGainGbp">£0.00</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">剩餘免稅額</div>
+        <div class="summary-value amber" id="remainingAllowance">£0.00</div>
+      </div>
     </div>
 
-    <div class="breakdown" id="breakdown">
-      <div class="breakdown-row">
-        <span class="breakdown-label">每股盈利（USD）</span>
-        <span class="breakdown-value" id="gainUsd">$0.00</span>
+    <div class="allowance-bar-wrap">
+      <div class="allowance-bar">
+        <div class="allowance-bar-fill" id="allowanceBarFill"></div>
       </div>
-      <div class="breakdown-row">
-        <span class="breakdown-label">每股盈利（GBP）</span>
-        <span class="breakdown-value" id="gainGbp">£0.00</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="breakdown-label">總賣出金額（USD）</span>
-        <span class="breakdown-value" id="totalSellUsd">$0.00</span>
-      </div>
-      <div class="breakdown-row total">
-        <span class="breakdown-label">總盈利（GBP）</span>
-        <span class="breakdown-value green" id="totalGainGbp">£0.00</span>
-      </div>
-      <div class="breakdown-row">
-        <span class="breakdown-label">剩餘免稅額</span>
-        <span class="breakdown-value amber" id="remainingAllowance">£0.00</span>
+      <div class="allowance-bar-labels">
+        <span id="allowanceUsed">£0.00 / £0.00</span>
+        <span id="allowancePct">0%</span>
       </div>
     </div>
 
@@ -93,8 +73,8 @@
   </div>
 
   <p class="info">
-    計算方式：(賣出價 - 買入價) ÷ 匯率 = 每股盈利（GBP）<br>
-    免稅額 ÷ 每股盈利 = 最多可賣股數<br>
+    每股盈利 = (賣出價 − 加權平均買入價) ÷ 匯率<br>
+    加權平均 = Σ(買入價 × 數量) ÷ 總數量<br>
     僅供參考，實際稅務以 HMRC 為準
   </p>
 </div>
