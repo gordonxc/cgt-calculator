@@ -110,11 +110,18 @@ function renderStock(stock) {
     <button class="btn-add-lot" data-add-lot="${stock.id}">+ 買入批次</button>
     <div class="stock-result" data-stats></div>
     <div class="sell-section">
-      <label>賣出價<span class="currency-hint">USD</span></label>
-      <input type="number" class="sell-input lot-input" style="text-align:right" step="0.01" min="0" placeholder="0.00" value="${stock.sellPrice}">
-      <label>賣出股數</label>
-      <input type="number" class="sell-qty-input" style="text-align:right" step="1" min="0" placeholder="0" value="${stock.sellQty}">
-      <span class="sell-stat" data-sell-gain>£0.00</span>
+      <div class="sell-row">
+        <label>賣出價<span class="currency-hint">USD</span></label>
+        <input type="number" class="sell-input" step="0.01" min="0" placeholder="0.00" value="${stock.sellPrice}">
+      </div>
+      <div class="sell-row">
+        <label>賣出股數</label>
+        <input type="number" class="sell-qty-input" step="1" min="0" placeholder="0" value="${stock.sellQty}">
+      </div>
+      <div class="sell-gain-row">
+        <span class="label-tag">此股盈利</span>
+        <span class="sell-stat" data-sell-gain>£0.00</span>
+      </div>
     </div>
   `;
   els.stockList.appendChild(div);

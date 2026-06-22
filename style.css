@@ -263,30 +263,38 @@ input[type="number"]::-webkit-outer-spin-button {
 .stock-stat-value.green { color: #4ade80; }
 .stock-stat-value.red { color: #f87171; }
 
-/* Sell qty input */
+/* Sell section */
 .sell-section {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   background: #111320;
   border: 1px solid #2a2d3a;
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 12px 14px;
 }
 
-.sell-section label {
+.sell-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sell-row label {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
-.sell-section input {
+.sell-row input {
   flex: 1;
-  padding: 6px 10px !important;
+  padding: 9px 10px !important;
   padding-left: 10px !important;
   font-size: 0.95rem !important;
   text-align: right;
   border-radius: 6px;
+  min-width: 0;
 }
 
 .sell-stat {
@@ -294,11 +302,23 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  min-width: 80px;
   text-align: right;
 }
 .sell-stat.green { color: #4ade80; }
 .sell-stat.red { color: #f87171; }
+
+.sell-gain-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.sell-gain-row .label-tag {
+  font-size: 0.72rem;
+  color: #52525b;
+}
 
 /* === Add Stock Button === */
 
