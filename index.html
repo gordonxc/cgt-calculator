@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Gains Tax 計算機</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f1117;
+    color: #e4e4e7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .container {
+    max-width: 480px;
+    width: 100%;
+  }
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 4px;
+    color: #f4f4f5;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #71717a;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: #1a1d27;
+    border: 1px solid #2a2d3a;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .input-group {
+    margin-bottom: 18px;
+  }
+  .input-group:last-child { margin-bottom: 0; }
+  label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #a1a1aa;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .currency-hint {
+    font-size: 0.72rem;
+    color: #52525b;
+    font-weight: 400;
+  }
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-prefix {
+    position: absolute;
+    left: 14px;
+    color: #52525b;
+    font-size: 0.95rem;
+    pointer-events: none;
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    padding-left: 34px;
+    background: #111320;
+    border: 1.5px solid #2a2d3a;
+    border-radius: 10px;
+    color: #f4f4f5;
+    font-size: 1.05rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="number"]:focus {
+    border-color: #6366f1;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+  .result-card {
+    background: linear-gradient(135deg, #1e2235, #1a1e30);
+    border: 1px solid #312e4a;
+  }
+  .result-main {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .result-label {
+    font-size: 0.8rem;
+    color: #818cf8;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .result-value {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    line-height: 1.1;
+  }
+  .result-unit {
+    font-size: 0.9rem;
+    color: #71717a;
+    margin-top: 2px;
+  }
+  .breakdown {
+    border-top: 1px solid #2a2d3a;
+    padding-top: 16px;
+  }
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 0.85rem;
+  }
+  .breakdown-row.total {
+    border-top: 1px solid #2a2d3a;
+    margin-top: 6px;
+    padding-top: 13px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .breakdown-label { color: #a1a1aa; }
+  .breakdown-value { color: #e4e4e7; font-variant-numeric: tabular-nums; }
+  .breakdown-value.green { color: #4ade80; }
+  .breakdown-value.amber { color: #fbbf24; }
+  .warning {
+    background: #422006;
+    border: 1px solid #78350f;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.8rem;
+    color: #fbbf24;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+  .info {
+    font-size: 0.75rem;
+    color: #52525b;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  .preset-btn {
+    display: inline-block;
+    background: #111320;
+    border: 1px solid #2a2d3a;
+    border-radius: 8px;
+    padding: 4px 12px;
+    color: #818cf8;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.15s;
+  }
+  .preset-btn:hover {
+    background: #1a1d27;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Capital Gains Tax 計算機</h1>
+  <p class="subtitle">計算最多可以賣幾多股而唔超過免稅額</p>
+
+  <div class="card">
+    <div class="input-group">
+      <label>
+        買入價（每股）
+        <span class="currency-hint">USD</span>
+      </label>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="buyPrice" step="0.01" min="0" placeholder="0.00" value="100">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>
+        賣出價（每股）
+        <span class="currency-hint">USD</span>
+      </label>
+      <div class="input-wrap">
+        <span class="input-prefix">$</span>
+        <input type="number" id="sellPrice" step="0.01" min="0" placeholder="0.00" value="120">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>
+        英鎊兌美金匯率
+        <span class="currency-hint">1 GBP = ? USD</span>
+      </label>
+      <div class="input-wrap">
+        <input type="number" id="fxRate" step="0.0001" min="0" placeholder="1.2700" value="1.27" style="padding-left: 14px;">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>
+        免稅限額（CGT Allowance）
+        <span class="currency-hint">GBP</span>
+        <span class="preset-btn" onclick="document.getElementById('allowance').value=3000; calc();">£3,000</span>
+      </label>
+      <div class="input-wrap">
+        <span class="input-prefix">£</span>
+        <input type="number" id="allowance" step="1" min="0" placeholder="0" value="3000">
+      </div>
+    </div>
+  </div>
+
+  <div class="card result-card">
+    <div class="result-main">
+      <div class="result-label">建議賣出股數</div>
+      <div class="result-value" id="maxShares">0</div>
+      <div class="result-unit">股</div>
+    </div>
+
+    <div class="breakdown" id="breakdown">
+      <div class="breakdown-row">
+        <span class="breakdown-label">每股盈利（USD）</span>
+        <span class="breakdown-value" id="gainUsd">$0.00</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">每股盈利（GBP）</span>
+        <span class="breakdown-value" id="gainGbp">£0.00</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">總賣出金額（USD）</span>
+        <span class="breakdown-value" id="totalSellUsd">$0.00</span>
+      </div>
+      <div class="breakdown-row total">
+        <span class="breakdown-label">總盈利（GBP）</span>
+        <span class="breakdown-value green" id="totalGainGbp">£0.00</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-label">剩餘免稅額</span>
+        <span class="breakdown-value amber" id="remainingAllowance">£0.00</span>
+      </div>
+    </div>
+
+    <div class="warning" id="warning" style="display:none;"></div>
+  </div>
+
+  <p class="info">
+    計算方式：(賣出價 - 買入價) ÷ 匯率 = 每股盈利（GBP）<br>
+    免稅額 ÷ 每股盈利 = 最多可賣股數<br>
+    僅供參考，實際稅務以 HMRC 為準
+  </p>
+</div>
+
+<script>
+function calc() {
+  const buy = parseFloat(document.getElementById('buyPrice').value) || 0;
+  const sell = parseFloat(document.getElementById('sellPrice').value) || 0;
+  const fx = parseFloat(document.getElementById('fxRate').value) || 0;
+  const allowance = parseFloat(document.getElementById('allowance').value) || 0;
+
+  const gainUsd = sell - buy;
+  const gainGbp = fx > 0 ? gainUsd / fx : 0;
+
+  let maxShares = 0;
+  let warning = '';
+
+  if (gainUsd <= 0) {
+    maxShares = Infinity;
+    warning = '⚠️ 賣出價 ≤ 買入價，無資本增值，可以隨意賣出。';
+  } else if (gainGbp > 0 && allowance > 0) {
+    maxShares = Math.floor(allowance / gainGbp);
+    if (maxShares === 0) {
+      warning = '⚠️ 每股盈利已超過免稅額，賣任何一股都要交稅。';
+    }
+  }
+
+  // Display
+  document.getElementById('gainUsd').textContent = (gainUsd >= 0 ? '+' : '') + '$' + gainUsd.toFixed(2);
+  document.getElementById('gainGbp').textContent = (gainGbp >= 0 ? '+' : '') + '£' + gainGbp.toFixed(2);
+
+  const totalSellUsd = maxShares * sell;
+  const totalGainGbp = maxShares * gainGbp;
+  const remaining = allowance - totalGainGbp;
+
+  document.getElementById('totalSellUsd').textContent = '$' + totalSellUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  document.getElementById('totalGainGbp').textContent = '£' + totalGainGbp.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  document.getElementById('remainingAllowance').textContent = '£' + remaining.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+  const sharesEl = document.getElementById('maxShares');
+  sharesEl.textContent = maxShares === Infinity ? '∞' : maxShares.toLocaleString('en-US');
+
+  const warnEl = document.getElementById('warning');
+  if (warning) {
+    warnEl.style.display = 'block';
+    warnEl.textContent = warning;
+  } else {
+    warnEl.style.display = 'none';
+  }
+}
+
+['buyPrice', 'sellPrice', 'fxRate', 'allowance'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calc);
+});
+
+calc();
+</script>
+</body>
+</html>
